@@ -1,7 +1,15 @@
-from auxstuff import str2num
-from collections import namedtuple
+from auxstuff import str2tupel
+from auxstuff import tMesswert
+#from collections import namedtuple
 
-DmmResult = namedtuple('DmmResult', ['value', 'unit', 'tstamp', 'tunit'])
+#tMesswert = namedtuple('tMesswert', ['value', 'unit'])
+#tMesswert.__doc__ = """Messwert mit Wert und Einheit"""
+
+#now make a array of 2 namedtuples
+
+
+DmmResult = tMesswert(0.0, "V")
+
 
 class Keithley2700(object):
     name = 'Keithley 2700'
@@ -76,10 +84,12 @@ class Keithley2700(object):
     def getVDC(self):
         result = self.read()
         result = result.split(',')
-        print(result)
-        value,unit = str2num(result[0])
-        #split the timestamp into time and unit discard the unit
-        tstamp,tunit = str2num(result[1])
-        return(value,unit,tstamp, tunit)
+        #print(result)
+        #print(len(result))
+        retval = [tMesswert(0.0, "V"), tMesswert(0.0, "s")]
+        for i in range(len(result)):
+            #print(result[i])
+            retval[i] = str2tupel(result[i])
+        return(retval)
 
    

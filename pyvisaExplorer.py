@@ -38,8 +38,8 @@ dmm.setVDC()
 dmm.setValueOnly()
 #dmm.mpxclose(1,12)
 
-result = DmmResult._make(dmm.getVDC())
-print(f"Voltage: {result.value:.2e} {result.unit} at T={result.tstamp:.2e}{result.tunit}")
+dmmResult = dmm.getVDC()
+print(f"Voltage: {dmmResult[0].value:.4e} {dmmResult[0].unit} at T={dmmResult[1].value:.2e}{dmmResult[1].unit}")
 
 # Close the connection
 dmm.close()
