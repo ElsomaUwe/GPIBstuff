@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../PythonKram1"
+		},
+		{
+			"name": "MagpylibBasics",
+			"path": "../../PythonGit/MagpylibBasics"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}
