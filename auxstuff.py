@@ -17,8 +17,8 @@ def str2num(measurement_string):
 
 if __name__ == "__main__":
 # Example usage:
-    measurement_string = "1.23e-5µA"
-    result = split_measurement_string(measurement_string)
+    measurement_string = "1.23e-5µA,200234SEC"
+    result = str2num(measurement_string)
 
     if result:
         number, unit = result
