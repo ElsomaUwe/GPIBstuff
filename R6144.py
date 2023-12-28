@@ -8,8 +8,22 @@ class R6144:
         self.handle = self.rm.open_resource("GPIB0::" + str(self.adress) + "::INSTR")
         self.handle.write("*RST")
         self.handle.write("*CLS")
-        
-    def set_current(self, current):
+
+    def write(self, command):
+        self.handle.write(command)
+ 
+    def setDC_V(self, voltage):
+        #write voltage to R6144 with format D{voltage} and 3 digits after decimal point
+        self.write("D{:.3f}V".format(voltage))
+
+    def setDC_mV(self, voltage):
+        #write voltage to R6144 with format D{voltage} and 3 digits after decimal point
+        self.write("D{:.3f}MV".format(voltage))
+
+    def setDC_mA(self, current):
+        #write current to R6144 with format D{current} and 3 digits after decimal point
+        self.write("D{:.3f}MA".format(current))
+
         pass
     def get_current(self):
         return self.current
@@ -17,4 +31,3 @@ class R6144:
     def close(self):
         self.handle.close()
         self.rm.close()
-        
