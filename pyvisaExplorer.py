@@ -15,6 +15,9 @@ dmm = None
 vsrc = None
 rm = None
 voltage = 0.0
+vstart = -0.00001
+vstop = 0.00001
+vstep = 0.0000001
 
 def startupProcedure():
     global dmm,rm,vsrc
@@ -55,33 +58,31 @@ dmm.setValueOnly()
 
 # prepare Voltage Source
 print("5. Set Voltage Source to 0.0V and turn it on")
-voltage = 0.136
-vsrc.setDC_V(voltage)
+voltage = vstart
+vsrc.setDC_V(vstart)
 vsrc.write("E1")
 time.sleep(1)
-
-#now start a loop that repeats every 5 seconds
-#use a timer to time the loop
-j=0
 resultlist = []
 
 print("6. Start measurement loop")
+j=0
 while True:
-    dmmResult = dmm.getVDC()
-    print(f"Voltage: {dmmResult[0].value:.4e} {dmmResult[0].unit}")
-    try:
-        delta = (dmmResult[0].value - voltage)
-    except:
-        delta = 0.0
-    resultlist.append((j,dmmResult[0].value,dmmResult[0].unit,voltage,delta))
-    
-    voltage = voltage + 100e-9
-    j = j + 1
-    if voltage > 0.13601:
-        break
     vsrc.setDC_V(voltage)
     time.sleep(0.1)
+    [spg,tstamp] = dmm.getVDC()
 
+    print(f"Voltage: {spg.value:.4e} {spg.unit}")
+    try:
+        delta = (spg.value - voltage)
+    except:
+        delta = 0.0
+    resultlist.append((j,spg.value,spg.unit,voltage,delta))
+    
+    voltage = voltage + vstep
+    j = j + 1
+    if voltage > vstop + 1E-10:
+        break
+ 
 # turn off voltage source
 vsrc.write("H1")
 
