@@ -15,9 +15,10 @@ dmm = None
 vsrc = None
 rm = None
 voltage = 0.0
-vstart = -0.00001
+vstart = 0.100
 vstop = 0.00001
 vstep = 0.0000001
+samples = 2000
 
 def startupProcedure():
     global dmm,rm,vsrc
@@ -68,19 +69,18 @@ print("6. Start measurement loop")
 j=0
 while True:
     vsrc.setDC_V(voltage)
-    time.sleep(0.1)
+    time.sleep(0.5)
     [spg,tstamp] = dmm.getVDC()
 
-    print(f"Voltage: {spg.value:.4e} {spg.unit}")
+    print(f"i:{j} - V={spg.value:.4e}{spg.unit}")
     try:
         delta = (spg.value - voltage)
     except:
         delta = 0.0
     resultlist.append((j,spg.value,spg.unit,voltage,delta))
     
-    voltage = voltage + vstep
     j = j + 1
-    if voltage > vstop + 1E-10:
+    if j > samples:
         break
  
 # turn off voltage source
@@ -97,10 +97,16 @@ x = np.array(resultlist,dtype=[('i',float),('value',float),('unit',object),('vol
 #now plot a dot diagram of the results
 plt.figure()
 
-plt.plot(x['voltage'],x['delta'],'o')
+plt.plot(x['i'],x['delta'],'o')
 #set grid on
 plt.grid()
 #plt.xticks(np.arange(0,len(x['i']),1))
 plt.show()
+
+#now calculate standard deviation of x['value']
+print(f"Standard deviation: {np.std(x['value'])}")
+#and mean value of x['value']
+print(f"Mean value: {np.mean(x['value'])}")
+
 
 
